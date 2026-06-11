@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Awesome Web Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ====== CSS ====== -->
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #f4f5fb;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    body.dark {
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Header / Navbar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #ffffffcc;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    body.dark header {
+      background: #020617dd;
+      border-bottom-color: #1f2937;
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1.5rem;
+    }
+
+    .logo {
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      font-size: 1.1rem;
+    }
+
+    .logo span {
+      color: #3b82f6;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .nav-links a:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    body.dark .nav-links a:hover {
+      background: #111827;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: #3b82f6;
+      color: white;
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 24px rgba(59, 130, 246, 0.35);
+      opacity: 0.95;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: #111827;
+      border: 1px solid #9ca3af;
+      box-shadow: none;
+    }
+
+    body.dark .btn.secondary {
+      color: #e5e7eb;
+      border-color: #374151;
+    }
+
+    /* Main layout */
+    main {
+      max-width: 1100px;
+      margin: 1.5rem auto 3rem auto;
+      padding: 0 1.5rem;
+    }
+
+    section {
+      padding: 3rem 0;
+    }
+
+    /* Hero section */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.8fr);
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title span {
+      color: #3b82f6;
+    }
+
+    .hero-subtitle {
+      font-size: 0.98rem;
+      max-width: 32rem;
+      color: #4b5563;
+      margin-bottom: 1.5rem;
+    }
+
+    body.dark .hero-subtitle {
+      color: #9ca3af;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      margin-bottom: 1.4rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    body.dark .hero-meta {
+      color: #9ca3af;
+    }
+
+    .hero-image {
+      background: radial-gradient(circle at top, #3b82f6 0, #1d4ed8 40%, #020617 100%);
+      border-radius: 1.8rem;
+      position: relative;
+      padding: 2rem 1.5rem;
+      color: white;
+      overflow: hidden;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-image h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-image .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: #1d4ed8;
+      margin-bottom: 1rem;
+      opacity: 0.95;
+    }
+
+    .hero-image .badge-row {
+      display: flex;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-image .badge {
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      opacity: 0.9;
+    }
+
+    .hero-image .floating-card {
+      position: absolute;
+      bottom: 1.5rem;
+      right: 1.6rem;
+      background: #f9fafb;
+      color: #111827;
+      border-radius: 1rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      box-shadow: 0 20px 35px rgba(15, 23, 42, 0.55);
+      max-width: 180px;
+    }
+
+    .hero-image .floating-card span {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    /* Features */
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 1.8rem;
+    }
+
+    body.dark .section-subtitle {
+      color: #9ca3af;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.4rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: 1.2rem 1.3rem;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+      border: 1px solid #e5e7eb;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+      border-color: #3b82f6;
+    }
+
+    body.dark .card {
+      background: #020617;
+      border-color: #111827;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-title {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      font-size: 1rem;
+    }
+
+    .card-text {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    body.dark .card-text {
+      color: #9ca3af;
+    }
+
+    /* Contact form */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr);
+      gap: 2rem;
+      align-items: start;
+    }
+
+    form {
+      background: #ffffff;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    body.dark form {
+      background: #020617;
+      border-color: #111827;
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.86rem;
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 0.55rem 0.7rem;
+      border-radius: 0.6rem;
+      border: 1px solid #d1d5db;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border 0.1s, box-shadow 0.1s;
+      background: #f9fafb;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    body.dark input[type="text"],
+    body.dark input[type="email"],
+    body.dark textarea {
+      background: #020617;
+      border-color: #111827;
+      color: #e5e7eb;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 1px #3b82f6;
+      background: #ffffff;
+    }
+
+    body.dark input:focus,
+    body.dark textarea:focus {
+      background: #020617;
+    }
+
+    .hint {
+      font-size: 0.77rem;
+      color: #6b7280;
+    }
+
+    body.dark .hint {
+      color: #9ca3af;
+    }
+
+    .status {
+      margin-top: 0.6rem;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .status.success {
+      color: #16a34a;
+    }
+
+    .status.error {
+      color: #dc2626;
+    }
+
+    /* Side info */
+    .contact-info {
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    body.dark .contact-info {
+      color: #9ca3af;
+    }
+
+    .contact-info ul {
+      margin-top: 0.6rem;
+      list-style: disc;
+      padding-left: 1.2rem;
+    }
+
+    .toggle-theme {
+      margin-left: 0.7rem;
+      font-size: 0.75rem;
+      padding: 0.35rem 0.7rem;
+    }
+
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      right: 1.3rem;
+      bottom: 1.3rem;
+      padding: 0.55rem 0.7rem;
+      border-radius: 999px;
+      border: none;
+      background: #111827;
+      color: #f9fafb;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: none;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.4);
+    }
+
+    body.dark .back-to-top {
+      background: #f9fafb;
+      color: #111827;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      padding: 1.5rem 0 2.2rem 0;
+      color: #9ca3af;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-image {
+        order: -1;
+      }
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ====== HEADER ====== -->
+  <header>
+    <nav class="nav">
+      <div class="logo">
+        My<span>Site</span>
+      </div>
+      <div class="nav-links">
+        <a href="#hero">Home</a>
+        <a href="#features">Features</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div>
+        <button id="themeToggle" class="btn secondary toggle-theme">
+          ☀️ Light
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ====== MAIN ====== -->
+  <main>
+    <!-- Hero -->
+    <section id="hero" class="hero">
+      <div>
+        <h1 class="hero-title">
+          Build beautiful <span>web pages</span> with HTML, CSS & JavaScript.
+        </h1>
+        <p class="hero-subtitle">
+          This is a simple demo template showing how you can combine structure,
+          style, and interactivity in a single, clean web page.
+        </p>
+        <div class="hero-actions">
+          <button class="btn" id="learnMoreBtn">Show alert</button>
+          <button class="btn secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+            View features
+          </button>
+        </div>
+        <div class="hero-meta">
+          <span>⚡ Fully responsive</span>
+          <span>🎯 Pure HTML, CSS & JS</span>
+        </div>
+      </div>
+
+      <aside class="hero-image">
+        <div>
+          <div class="tag">
+            <span>●</span> Live Preview
+          </div>
+          <h2>Front-end Playground</h2>
+          <p style="font-size:0.9rem; opacity:0.9;">
+            Practice layouts, buttons, forms, and basic interactivity here.
+          </p>
+        </div>
+        <div class="badge-row">
+          <div class="badge">HTML5</div>
+          <div class="badge">CSS3</div>
+          <div class="badge">JavaScript</div>
+          <div class="badge">Responsive</div>
+        </div>
+        <div class="floating-card">
+          <span id="liveClock">00:00:00</span>
+          Local time (live)
+        </div>
+      </aside>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+      <h2 class="section-title">Features</h2>
+      <p class="section-subtitle">
+        These are just example components you can reuse and modify.
+      </p>
+      <div class="features">
+        <article class="card">
+          <div class="card-icon">📱</div>
+          <h3 class="card-title">Responsive layout</h3>
+          <p class="card-text">
+            The grid adapts to mobile screens using CSS media queries, so the
+            layout stays clean on all devices.
+          </p>
+        </article>
+        <article class="card">
+          <div class="card-icon">🎨</div>
+          <h3 class="card-title">Light / Dark mode</h3>
+          <p class="card-text">
+            Toggle between light and dark themes using JavaScript by switching a
+            class on the <code>&lt;body&gt;</code>.
+          </p>
+        </article>
+        <article class="card">
+          <div class="card-icon">⚙️</div>
+          <h3 class="card-title">Form validation</h3>
+          <p class="card-text">
+            The contact form shows basic error messages if fields are empty or
+            invalid. You can extend it as needed.
+          </p>
+        </article>
+        <article class="card">
+          <div class="card-icon">⏱️</div>
+          <h3 class="card-title">Live clock</h3>
+          <p class="card-text">
+            A simple JavaScript interval updates the clock every second to show
+            the current time.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <h2 class="section-title">Contact</h2>
+      <p class="section-subtitle">
+        This form doesn’t actually send data anywhere — it’s a front-end demo.
+      </p>
+
+      <div class="contact-grid">
+        <form id="contactForm" novalidate>
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" type="text" placeholder="Enter your name" />
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="you@example.com" />
+            <div class="hint">We'll never share your email with anyone.</div>
+          </div>
+
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Write your message here..."></textarea>
+          </div>
+
+          <button type="submit" class="btn">Send message</button>
+          <div id="formStatus" class="status"></div>
+        </form>
+
+        <div class="contact-info">
+          <p>
+            You can replace this text with real contact details, social links,
+            or a small “About me” section.
+          </p>
+          <ul>
+            <li>⚡ Built with vanilla HTML/CSS/JS</li>
+            <li>🧩 Easy to customize</li>
+            <li>📁 Just one file: <code>index.html</code></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Back to top button -->
+  <button class="back-to-top" id="backToTop">↑ Top</button>
+
+  <!-- Footer -->
+  <footer>
+    Made with ♥ using HTML, CSS & JavaScript.
+  </footer>
+
+  <!-- ====== JavaScript ====== -->
+  <script>
+    // Theme toggle
+    const themeToggleBtn = document.getElementById("themeToggle");
+    const body = document.body;
+
+    // Load saved theme if available
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      body.classList.add("dark");
+      themeToggleBtn.textContent = "🌙 Dark";
+    }
+
+    themeToggleBtn.addEventListener("click", () => {
+      body.classList.toggle("dark");
+      const isDark = body.classList.contains("dark");
+      themeToggleBtn.textContent = isDark ? "🌙 Dark" : "☀️ Light";
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+
+    // Simple alert button
+    const learnMoreBtn = document.getElementById("learnMoreBtn");
+    learnMoreBtn.addEventListener("click", () => {
+      alert("This is a demo page created using HTML, CSS and JavaScript!");
+    });
+
+    // Contact form validation
+    const contactForm = document.getElementById("contactForm");
+    const formStatus = document.getElementById("formStatus");
+
+    contactForm.addEventListener("submit", (event) => {
+      event.preventDefault(); // Prevent real submit
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!name || !email || !message) {
+        formStatus.textContent = "Please fill in all fields.";
+        formStatus.className = "status error";
+        formStatus.style.display = "block";
+        return;
+      }
+
+      // Very basic email check
+      if (!email.includes("@") || !email.includes(".")) {
+        formStatus.textContent = "Please enter a valid email address.";
+        formStatus.className = "status error";
+        formStatus.style.display = "block";
+        return;
+      }
+
+      formStatus.textContent = "Message sent successfully (demo only)!";
+      formStatus.className = "status success";
+      formStatus.style.display = "block";
+
+      // Clear inputs
+      contactForm.reset();
+    });
+
+    // Back to top logic
+    const backToTopBtn = document.getElementById("backToTop");
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 250) {
+        backToTopBtn.style.display = "block";
+      } else {
+        backToTopBtn.style.display = "none";
+      }
+    });
+
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Live clock in hero card
+    const liveClock = document.getElementById("liveClock");
+
+    function updateClock() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+      const ss = String(now.getSeconds()).padStart(2, "0");
+      liveClock.textContent = `${hh}:${mm}:${ss}`;
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
