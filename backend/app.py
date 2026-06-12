@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from datetime import datetime
 import joblib
 
 from backend.recommendations import recommendations
@@ -7,10 +9,20 @@ from backend.database import predictions_collection
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 model = joblib.load("backend/disease_model.pkl")
 
 
 class Symptoms(BaseModel):
+    name: str
+    age: int
     fever: int
     cough: int
     headache: int
@@ -19,7 +31,9 @@ class Symptoms(BaseModel):
 
 @app.get("/")
 def home():
-    return {"message": "AI Healthcare Recommendation System API is running"}
+    return {
+        "message": "AI Healthcare Recommendation System API is running"
+    }
 
 
 @app.post("/predict")
@@ -42,6 +56,9 @@ def predict(symptoms: Symptoms):
     }
 
     predictions_collection.insert_one({
+        "name": symptoms.name,
+        "age": symptoms.age,
+        "timestamp": datetime.now().isoformat(),
         "fever": symptoms.fever,
         "cough": symptoms.cough,
         "headache": symptoms.headache,
