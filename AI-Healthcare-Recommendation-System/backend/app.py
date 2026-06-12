@@ -7,16 +7,19 @@ from backend.recommendations import recommendations
 
 app = FastAPI()
 
-# CORS FIX
+# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://ai-healthcare-recommendation-system.vercel.app",
+        "http://localhost:5173"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Load ML Model
+# Load ML model
 model = joblib.load("backend/disease_model.pkl")
 
 
@@ -29,7 +32,7 @@ class Symptoms(BaseModel):
     fatigue: int
 
 
-# Temporary history storage
+# Temporary in-memory history
 history = []
 
 
@@ -70,7 +73,6 @@ def predict(symptoms: Symptoms):
         "precaution": recommendation["precaution"]
     }
 
-    # Save locally in memory
     history.append(result)
 
     return result
