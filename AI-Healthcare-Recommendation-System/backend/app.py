@@ -10,11 +10,8 @@ app = FastAPI()
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://ai-healthcare-recommendation-system.vercel.app",
-        "http://localhost:5173"
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -32,7 +29,7 @@ class Symptoms(BaseModel):
     fatigue: int
 
 
-# Temporary in-memory history
+# Temporary memory storage
 history = []
 
 
