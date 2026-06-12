@@ -1,23 +1,26 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from datetime import datetime
 import joblib
 
 from backend.recommendations import recommendations
-from backend.database import predictions_collection
 
 app = FastAPI()
 
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Load model
 model = joblib.load("backend/disease_model.pkl")
+
+# Temporary history
+history = []
 
 
 class Symptoms(BaseModel):
@@ -46,30 +49,31 @@ def predict(symptoms: Symptoms):
         symptoms.fatigue
     ]])
 
-    disease = prediction[0]
+    disease = str(prediction[0])
+
+    recommendation = recommendations.get(
+        disease,
+        {
+            "medicine": "Consult Doctor",
+            "doctor": "General Physician",
+            "precaution": "Take Rest"
+        }
+    )
 
     result = {
-        "predicted_disease": disease,
-        "medicine": recommendations[disease]["medicine"],
-        "doctor": recommendations[disease]["doctor"],
-        "precaution": recommendations[disease]["precaution"]
-    }
-
-    predictions_collection.insert_one({
         "name": symptoms.name,
         "age": symptoms.age,
-        "timestamp": datetime.now().isoformat(),
-        "fever": symptoms.fever,
-        "cough": symptoms.cough,
-        "headache": symptoms.headache,
-        "fatigue": symptoms.fatigue,
-        **result
-    })
+        "predicted_disease": disease,
+        "medicine": recommendation["medicine"],
+        "doctor": recommendation["doctor"],
+        "precaution": recommendation["precaution"]
+    }
+
+    history.append(result)
 
     return result
 
 
 @app.get("/history")
 def get_history():
-    data = list(predictions_collection.find({}, {"_id": 0}))
-    return data
+    return history

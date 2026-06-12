@@ -16,10 +16,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load ML model
+# Load model
 model = joblib.load("backend/disease_model.pkl")
 
-# Temporary history storage
+# Temporary history
 history = []
 
 
