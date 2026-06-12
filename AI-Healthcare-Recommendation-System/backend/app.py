@@ -7,7 +7,7 @@ from backend.recommendations import recommendations
 
 app = FastAPI()
 
-# CORS Configuration
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -19,6 +19,9 @@ app.add_middleware(
 # Load ML model
 model = joblib.load("backend/disease_model.pkl")
 
+# Temporary history storage
+history = []
+
 
 class Symptoms(BaseModel):
     name: str
@@ -27,10 +30,6 @@ class Symptoms(BaseModel):
     cough: int
     headache: int
     fatigue: int
-
-
-# Temporary memory storage
-history = []
 
 
 @app.get("/")
@@ -50,7 +49,7 @@ def predict(symptoms: Symptoms):
         symptoms.fatigue
     ]])
 
-    disease = prediction[0]
+    disease = str(prediction[0])
 
     recommendation = recommendations.get(
         disease,
