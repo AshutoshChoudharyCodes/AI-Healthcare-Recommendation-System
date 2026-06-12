@@ -15,7 +15,9 @@ function App() {
   const [history, setHistory] = useState([]);
 
   const fetchHistory = async () => {
-    const response = await fetch("http://127.0.0.1:8000/history");
+    const response = await fetch(
+      "https://ai-healthcare-recommendation-system.onrender.com/history"
+    );
     const data = await response.json();
     setHistory(data);
   };
@@ -25,13 +27,16 @@ function App() {
   }, []);
 
   const handleSubmit = async () => {
-    const response = await fetch("http://127.0.0.1:8000/predict", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await fetch(
+      "https://ai-healthcare-recommendation-system.onrender.com/predict",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
     const data = await response.json();
     setResult(data);
